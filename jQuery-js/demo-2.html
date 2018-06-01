@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<title>javascript学习</title>
+</head>
+<body>
+	<script type="text/javascript">
+		//map 方法迭代数组
+		//使用 map 方法来为 oldArraya 中的每一项增加3，并且在 newArraya 中保存它们。 oldArraya 不应该被改变。
+		var oldArraya = [1,2,3,4,5];
+		var newArraya = oldArraya.map(function(val){
+		  return val + 3;
+		});
+		console.log(newArraya);
+
+		//reduce 方法迭代数组
+		//使用 reduce 方法来让 oldArrayb 中的所有值相加，并且把结果赋值给 newArrayb 。
+		var oldArrayb = [4,5,6,7,8];
+		var newArrayb = 0;
+		newArrayb = oldArrayb.reduce(function(a,b){
+		  return a +b;
+		});
+		console.log(newArrayb);
+
+		//filter 方法迭代一个数组，并且按给出的条件过滤出符合的元素。
+		//使用 filter 来创建一个新数组，新数组的值是 oldArray 中值小于6的元素。不许改变原数组 oldArray 。
+		var oldArrayc = [1,2,3,4,5,6,7,8,9,10];
+		var newArrayc = oldArrayc.filter(function(val){
+		  return val < 6;
+		});
+		console.log(newArrayc);
+
+		//sort 方法，按字母顺序或数字顺序对数组中的元素进行排序。
+		//使用 sort 按照从大到小的顺序排序 oldArrayd 。
+		var oldArrayd = [1, 12, 21, 2];
+		var newArrayd = oldArrayd.sort(function(a,b){
+		  return b - a;
+		});
+		console.log(newArrayd);
+
+		// reverse 方法来翻转数组
+		var oldArraye = [1,2,3,4,5,6,7];
+		var newArraye = [];
+		newArraye = oldArraye.reverse();
+		console.log(newArraye);
+
+		//concat 方法可以用来把两个数组的内容合并到一个数组中。
+		//使用 .concat() 将 concatMe 拼接到 oldArrayf 后面，并且赋值给 newArrayf。
+		var oldArrayf = [1,2,3];
+		var newArrayf = [];
+		var concatMe = [4,5,6];
+		newArrayf = oldArrayf.concat(concatMe);
+		console.log(newArrayf);
+
+		//split 方法按指定分隔符将字符串分割为数组.
+		//使用 split 方法来把字符串 string 分割为数组 newArrayg。
+		var string = "Split me into an array";
+		var newArrayg = [];
+		newArrayg = string.split(" ");
+		console.log(newArrayg);
+
+		// join 方法来把数组转换成字符串
+		//使用 join 方法，连接符为' '把数组 joinMe 转化成字符串 joinedString.
+		var joinMe = ["Split","me","into","an","array"];
+		var joinedString = '';
+		joinedString = joinMe.join(" ");
+		console.log(joinedString);
+	</script>
+</body>
+</html>

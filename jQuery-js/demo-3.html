@@ -1,0 +1,250 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<title>编程算法练习</title>
+</head>
+<body>
+<script type="text/javascript">
+	//翻转字符串
+	function reverseString(str) {
+  		var oldarr = str.split(""),
+  			newarr = oldarr.reverse(),
+  			str = newarr.join("");
+  		console.log(str);
+	  	return str;
+	}
+	reverseString("hello");
+
+	//计算一个整数的阶乘
+	function factorialize(num) {
+		var oldarr = [];
+		var i = 1;
+		if (num<1) {
+			oldarr.push(i);
+		} else {
+			for (i = 1; i <= num; i++) {
+			oldarr.push(i);
+		}
+		}
+		num = oldarr.reduce(function (a,b) {
+			return a * b;
+		});
+		console.log(num);
+	  	return num;
+	}
+	factorialize(5);
+
+	//如果给定的字符串是回文，返回true，反之，返回false。
+	function palindrome(str) {
+		var nstr = str.toLowerCase(),
+			oldstr = nstr.replace(/[^a-z\d]+/g, ""),
+			oldarr = oldstr.split(""),
+			newarr = oldarr.reverse(),
+			newstr = newarr.join("");
+			console.log(oldstr);
+		if (oldstr == newstr) {
+			return true;
+		}else {
+			return false;
+		}
+	}
+	palindrome("eye");
+
+	//找到提供的句子中最长的单词，并计算它的长度。
+	function findLongestWord(str) {
+		var oldarr = str.split(" ");
+		var long = 0;
+		for (var i = 0; i < oldarr.length; i++) {
+			if (oldarr[i].length > long) {
+				long = oldarr[i].length;
+				str = oldarr[i];
+			}
+		}
+		console.log(str);
+		return str.length;
+	}
+	findLongestWord("The quick brown fox jumped over the lazy dog");
+
+	// 确保字符串的每个单词首字母都大写，其余部分小写。
+	function titleCase(str) {
+		var str = str.toLowerCase(),
+			oldarr = str.split(" "),
+			newarr = [];
+		for (var i = 0; i < oldarr.length; i++) {
+			var a = oldarr[i].replace(/^\w/g, function (val) {
+				return val.toUpperCase();
+			});
+			newarr.push(a);
+		}
+		str = newarr.join(" ");
+		console.log(str);
+		return str;
+	}
+	titleCase("I'm a little tea pot");
+
+	//右边大数组中包含了4个小数组，分别找到每个小数组中的最大值，然后把它们串联起来，形成一个新数组。
+	function largestOfFour(arr) {
+		var oldarr = arr,
+			newarr = [];
+		for (var i = 0; i < oldarr.length; i++) {
+			var max = 0;
+			for (var j = 0; j < oldarr[i].length; j++) {
+				if (max < oldarr[i][j]) {
+					max = oldarr[i][j];
+				}
+			}
+			newarr.push(max);
+		}
+		arr = newarr;
+		console.log(arr);
+		return arr;
+	}
+	largestOfFour([[4, 5, 1, 3], [13, 27, 18, 26], [32, 35, 37, 39], [1000, 1001, 857, 1]]);
+
+	//检查一个字符串(str)是否以指定的字符串(target)结尾。
+	function confirmEnding(str, target) {
+		var long = target.length;
+		var a = str.substr(-long);
+		if (a == target) {
+			return str = true;
+		} else {
+			return str = false;
+		}
+	}
+	confirmEnding("Bastian", "n");
+
+	//重复一个指定的字符串 num次，如果num是一个负数则返回一个空字符串。
+	function repeat(str, num) {
+		var arr = "";
+		if (num < 0) {
+			str = ""
+		} else {
+			for (var i = 0; i < num; i++) {
+				arr = arr.concat(str);
+			}
+			str = arr;
+		}
+		console.log(str);
+		return str;
+	}
+	repeat("abc", 3);
+
+	//如果字符串的长度比指定的参数num长，则把多余的部分用...来表示。
+	function truncate(str, num) {
+	if (str.length <= num) {
+			str = str;
+		} else {
+			if (num > 3) {
+				str = str.substring(0,num-3);
+				str = str.concat("...");
+			} else {
+				str = str.substring(0,num);
+				str = str.concat("...");
+			}
+		}
+		console.log(str);
+		return str;
+	}
+	truncate("A-tisket a-tasket A green and yellow basket", "A-tisket a-tasket A green and yellow basket".length);
+
+	//把一个数组arr按照指定的数组大小size分割成若干个数组块。
+	function chunk(arr, size) {
+		var bout = Math.ceil(arr.length/size),
+			newarr = [];
+		for (var i = 0; i < bout; i++) {
+			newarr.push(arr.slice(i*size,i*size+size));
+		}
+		arr = newarr;
+		console.log(newarr);
+		return arr;
+	}
+	chunk(["a", "b", "c", "d"], 2);
+
+	//返回一个数组被截断n个元素后还剩余的元素，截断从索引0开始。
+	function slasher(arr, howMany) {
+		var newarr = [];
+		newarr = arr.slice(howMany);
+		arr = newarr;
+		console.log(newarr);
+		return arr;
+	}
+	slasher([1, 2, 3], 2);
+
+	//如果数组第一个字符串元素包含了第二个字符串元素的所有字符，函数返回true。
+	function mutation(arr) {
+		var newarr = [];
+			newarr.push(arr[0].toLowerCase()); 
+			newarr.push(arr[1].toLowerCase());
+		for (var i = 0; i < newarr[1].length; i++) {
+			var a = newarr[1][i],
+				b = newarr[0].indexOf(a);
+			if (b == -1) {
+				return arr = false; 
+			} else {
+				arr = true;
+			}
+		}
+	  	return arr;
+	}
+	mutation(["hEllo", "hey"]);
+
+	// 删除数组中的所有假值。
+	function bouncer(arr) {
+		var newarr = arr.filter(function (val) {
+			if (val != false || val != null || val != 0 || val != "" || val != undelfined || val != NaN) {
+				return val;
+			}
+		});
+		arr = newarr;
+		console.log(newarr);
+  		return arr;
+	}
+	bouncer([7, "ate", "", false, 9]);
+
+	//实现一个摧毁(destroyer)函数，第一个参数是待摧毁的数组，其余的参数是待摧毁的值
+	function destroyer(arr) {
+		var newarr;
+		for (var i = 1; i < arguments.length; i++) {
+			var now = arguments[i];
+			newarr = arr.filter(function (val) {
+				return val != now;
+			});
+			arr = newarr;
+		}
+	}
+	destroyer([1, 2, 3, 1, 2, 3], 2, 3);
+
+	//先给数组排序，然后找到指定的值在数组的位置，最后返回位置对应的索引。
+	function where(arr, num) {
+	arr.push(num);
+	arr.sort(function (a,b) {
+		return a-b;
+	});
+	num = arr.indexOf(num);
+	console.log(num);
+		return num;
+	}
+	where([40, 60], 50);
+
+	//写一个ROT13函数，实现输入加密字符串，输出解密字符串。
+	function rot13(str) { // LBH QVQ VG!
+	var arr = [];
+		for (var i = 0; i < str.length; i++) {
+			var a = str.charCodeAt(i);
+			if (a > 77 && a < 91) {
+				a = a + 13 - 90 + 64;
+			} else if(a > 64 && a < 78){
+				a = a + 13;
+			}
+			var b = String.fromCharCode(a);
+			arr.push(b);
+		}
+		str = arr.join("");
+  		console.log(str);
+	  	return str;
+	}
+	rot13("SERR PBQR PNZC");
+</script>
+</body>
+</html>

@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<title>jQuery Playground</title>
+	<meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link href="css/bootstrap.min.css" rel="stylesheet">
+    <link href="css/animate.min.css" rel="stylesheet">
+		<!--[if lt IE 9]>
+		<script src="https://oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
+		<script src="https://oss.maxcdn.com/libs/respond.js/1.4.2/respond.min.js"></script>
+		<![endif]-->
+</head>
+<body>
+		<!-- Only change code above this liine -->
+		<div class="container-fluid">
+			<h3 class="text-primary text-center">jQuery Playground</h3>
+			<div class="row">
+				<div class="col-xs-6">
+					<h4>#left-well</h4>
+					<div id="left-well" class="well">
+						<button id="target1" class="btn btn-default target">#target1</button>
+						<button id="target2" class="btn btn-default target">#target2</button>
+						<button id="target3" class="btn btn-default target">#target3</button>
+					</div>
+				</div>
+				<div class="col-xs-6">
+					<h4>#right-well</h4>
+					<div id="right-well" class="well">
+						<button id="target4" class="btn btn-default target">#target4</button>
+						<button id="target5" class="btn btn-default target">#target5</button>
+						<button id="target6" class="btn btn-default target">#target6</button>
+					</div>
+				</div>
+			</div>
+		</div>
+		<script src="js/jquery.js"></script>
+        <script src="js/bootstrap.min.js"></script>
+        <script type="text/javascript">
+        	$(document).ready(function () {
+        		//让所有的按钮做弹回效果
+        		// $("button").addClass("animated bounce");
+        		// $(".well").addClass("animated shake");
+        		// $("#target3").addClass("animated fadeOut");
+        		//移除样式
+        		//$("button").removeClass("btn-default");
+        		//改变元素的CSS样式
+        		//$("#target1").css("color","red");
+        		// 调整元素的属性
+        		//$("button").prop("disabled",true);
+        		// 改变元素标记本身
+        		$("#target4").html("<em>#target4</em>");
+        		// 移除页面元素
+        		$("#target4").remove();
+        		//移动元素
+        		$("#target2").appendTo("#right-well");
+        		// 拷贝元素
+        		$("#target5").clone().appendTo("#left-well");
+        		//父元素
+        		$("#target1").parent().css("background","red");
+        		// 子元素
+        		$("#right-well").children().css("color","orange");
+        		$(".target:nth-child(2)").addClass("animated bounce");
+        		$(".target:even").addClass("animated shake");
+        		$("body").addClass("animated hinge");
+        	});
+        </script>
+</body>
+</html>

@@ -1,0 +1,118 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<title>随机引用短语</title>
+	<style type="text/css">
+	html, body {
+		height: 100%;
+		width: 100%;
+		padding: 0;
+		margin: 0;
+	}
+	.bg {
+		background: url(http://bizhi.zhuoku.com/2010/10/15/jingxuan/jingxuan082.jpg) no-repeat center center;
+		height: 100%;
+	}
+	.content {
+		width: 450px;
+		border:1px solid red;
+		position: absolute;
+		top: 17%;
+		left: 34%;
+		background: #ccc;
+		border-radius: 15px;
+	}
+	.text {
+		height: auto;
+		color: #fff;
+	}
+	.text h1 {
+		text-align: center;
+	}
+	#sentence {
+		text-align: left;
+		padding: 20px;
+		font-size: 30px;
+		line-height: 1.1em;
+	}
+	#author {
+		text-align: right;
+		padding: 20px;
+		font-size: 25px;
+	}
+	.btn {
+		padding: 20px;
+		padding-bottom: 30px;
+	}
+	.btn #twitter {
+		border:1px solid yellow;
+		padding: 5px;
+		border-radius: 5px;
+		cursor: pointer;
+		background: orange;
+		color: #fff;
+	}
+	.btn #twitter:hover {
+		border:1px solid orange;
+		background: yellow;
+		color: #ccc;
+	}
+	.btn #next {
+		position: absolute;
+		right: 40px;
+		bottom: 27px;
+		height: 30px;
+		border-radius: 5px;
+		cursor: pointer;
+	}
+	</style>
+</head>
+<body>
+	<div class="bg">
+		<div class="content">
+			<div class="text">
+				<h1>随机引用短语</h1>
+				<div id="sentence"></div>
+				<div id="author"></div>
+			</div>
+			<div class="btn">
+				<a class="button" id="twitter" title="Tweet this quote!" target="_blank">twitter</a>
+				<button id="next">下一个</button>
+			</div>
+		</div>
+	</div>
+	<script type="text/javascript" src="js/jquery.js"></script>
+	<script type="text/javascript">
+		$(function () {
+			var q;
+			var a;
+			go();
+			$("#next").click(function () {
+				go();
+			})
+			$("#twitter").click(function () {
+				window.open('https://twitter.com/intent/tweet?hashtags=quotes&related=freecodecamp&text=' + encodeURIComponent('"' + q + '" ' + a), 'Share', 'width=550, height=400');
+			})
+			function go() {
+				$.ajax({
+					headers:{
+						"X-Mashape-Key":"LhHjhvZPxEmsh9tNsZ4mNJDQzStDp1Nb9a6jsn4dfLaOk5qh5O",
+						"Content-Type":"application/x-www-form-urlencoded",
+						Accept:"application/json"
+					},
+					type:"POST",
+					url:'https://andruxnet-random-famous-quotes.p.mashape.com/?cat=',
+					success:function (data) {
+						var t = JSON.parse(data);
+						q = t.quote;
+						a = t.author;
+						$("#sentence").text(q);
+						$("#author").text("————" + a);
+					}
+				});
+			};
+		});
+	</script>
+</body>
+</html>

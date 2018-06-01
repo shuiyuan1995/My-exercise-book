@@ -1,0 +1,204 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<title>天气查询</title>
+	<style type="text/css">
+	html, body, .bg {
+		height: 100%;
+		margin: 0;
+		padding: 0;
+	}
+	.bg {
+		background: url("http://pic.58pic.com/58pic/11/38/96/84M58PICXTm.jpg") no-repeat center center;
+		background-size: 100%;
+	}
+	.content {
+		margin: 0 auto;
+		padding: 30px;
+		text-align: center;
+	}
+	.search {
+		height: 40px;
+		position: relative;
+	}
+	#place {
+		height: 30px;
+		border-radius: 5px;
+		font-size: 20px;
+		padding: 3px;
+	}
+	#search {
+		height: 40px;
+	}
+	.text-today {
+		margin-top: 30px;
+		margin: 0 auto;
+		clear: both;
+	}
+	.text-today p {
+		display: inline-block;
+		width: 400px;
+		text-align: left;
+		font-size: 18px;
+		line-height: 24px;
+	}
+	.text-future {
+		margin-top: 60px;
+		margin-right: 30px;
+		width: 900px;
+		margin: 0 auto;
+		clear: both;
+	}
+	.text-future p {
+		width: 150px;
+		float: left;
+		text-align: left;
+		font-size: 18px;
+		line-height: 24px;
+	}
+	</style>
+</head>
+<body>
+	<div class="bg">
+		<div class="content">
+			<h1>天气查询</h1>
+			<div class="search">
+				<input id="place" type="text" placeholder="请输入城市地点"></input>
+				<button id="search">查询</button>
+			</div>
+			<div class="text-today">
+				<h3>今日天气</h3>
+				<p>
+					当前城市：<span id="city"></span><br>
+					当前时间：<span id="date_y"></span><br>
+					今日温度：<span id="temperature"></span><br>
+					当前风向：<span id="wind_direction"></span><br>
+					当前风力：<span id="wind_strength"></span><br>
+					今日天气：<span id="weather"></span><br>
+					当前湿度：<span id="humidity"></span><br>
+				</p>
+				<p>
+					穿衣指数：<span id="dressing_index"></span><br>
+					穿衣建议：<span id="dressing_advice"></span><br>
+					紫外线强度：<span id="uv_index"></span><br>
+					洗车指数：<span id="wash_index"></span><br>
+					旅游指数：<span id="travel_index"></span><br>
+					晨练指数：<span id="exercise_index"></span>
+				</p>
+			</div>
+			<div class="text-future">
+				<h3>未来六天天气</h3>
+				<p>
+					时间：<span id="date-1"></span><br>
+					温度：<span id="temperature-1"></span><br>
+					风向：<span id="wind-1"></span><br>
+					天气：<span id="weather-1"></span>
+				</p>
+				<p>
+					时间：<span id="date-2"></span><br>
+					温度：<span id="temperature-2"></span><br>
+					风向：<span id="wind-2"></span><br>
+					天气：<span id="weather-2"></span>
+				</p>
+				<p>
+					时间：<span id="date-3"></span><br>
+					温度：<span id="temperature-3"></span><br>
+					风向：<span id="wind-3"></span><br>
+					天气：<span id="weather-3"></span>
+				</p>
+				<p>
+					时间：<span id="date-4"></span><br>
+					温度：<span id="temperature-4"></span><br>
+					风向：<span id="wind-4"></span><br>
+					天气：<span id="weather-4"></span>
+				</p>
+				<p>
+					时间：<span id="date-5"></span><br>
+					温度：<span id="temperature-5"></span><br>
+					风向：<span id="wind-5"></span><br>
+					天气：<span id="weather-5"></span>
+				</p>
+				<p>
+					时间：<span id="date-6"></span><br>
+					温度：<span id="temperature-6"></span><br>
+					风向：<span id="wind-6"></span><br>
+					天气：<span id="weather-6"></span>
+				</p>
+			</div>
+		</div>
+	</div>
+	<script type="text/javascript" src="js/jquery.js"></script>
+	<script type="text/javascript">
+		$(function () {
+			$("#search").click(function () {
+				$.ajax({
+					type:"GET",
+					url:"http://v.juhe.cn/weather/index",
+					dataType:"jsonp",
+					data:{
+						cityname:$("#place").val(),
+						key:"074d5c3537cddce616e7d65b0c118866"
+					},
+					success:function (data) {
+						var r = data.result,
+							t = r.today,
+							s = r.sk,
+							f = r.future;
+						var arr = [];
+						$.each(f,function(n,value){
+							arr.push(value);
+						});
+						var arra = arr[1],
+							arrb = arr[2],
+							arrc = arr[3],
+							arrd = arr[4],
+							arre = arr[5],
+							arrf = arr[6];
+						$("#city").html(t.city);
+						$("#date_y").html(t.date_y + " " +t.week);
+						$("#temperature").html(t.temperature);
+						$("#wind_direction").html(s.wind_direction);
+						$("#wind_strength").html(s.wind_strength);
+						$("#weather").html(t.weather);
+						$("#humidity").html(s.humidity);
+						$("#dressing_index").html(t.dressing_index);
+						$("#dressing_advice").html(t.dressing_advice);
+						$("#uv_index").html(t.uv_index);
+						$("#wash_index").html(t.wash_index);
+						$("#travel_index").html(t.travel_index);
+						$("#exercise_index").html(t.exercise_index);
+						$("#date-1").html(arra.date);
+						$("#date-2").html(arrb.date);
+						$("#date-3").html(arrc.date);
+						$("#date-4").html(arrd.date);
+						$("#date-5").html(arre.date);
+						$("#date-6").html(arrf.date);
+						$("#temperature-1").html(arra.temperature);
+						$("#temperature-2").html(arrb.temperature);
+						$("#temperature-3").html(arrc.temperature);
+						$("#temperature-4").html(arrd.temperature);
+						$("#temperature-5").html(arre.temperature);
+						$("#temperature-6").html(arrf.temperature);
+						$("#wind-1").html(arra.wind);
+						$("#wind-2").html(arrb.wind);
+						$("#wind-3").html(arrc.wind);
+						$("#wind-4").html(arrd.wind);
+						$("#wind-5").html(arre.wind);
+						$("#wind-6").html(arrf.wind);
+						$("#weather-1").html(arra.weather);
+						$("#weather-2").html(arrb.weather);
+						$("#weather-3").html(arrc.weather);
+						$("#weather-4").html(arrd.weather);
+						$("#weather-5").html(arre.weather);
+						$("#weather-6").html(arrf.weather);
+					},
+					error:function () {
+						alert("发生错误：");
+					}
+				});
+			});
+		});
+	</script>
+</body>
+</html>

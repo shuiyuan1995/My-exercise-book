@@ -1,0 +1,165 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+	<meta charset="UTF-8">
+	<title>弹幕</title>
+	<script src="https://cdn.wilddog.com/sdk/js/2.3.8/wilddog.js"></script>
+	<style type="text/css">
+		body,html {
+			height: 100%;
+		}
+		body {
+			background: rgba(204,204,204,0.6);
+		}
+		.container {
+			width: 80%;
+			margin: 0 auto;
+			height: 100%;
+		}
+		.page {
+			background: #fff;
+			height: 60%;
+			width:100%;
+			border: 2px solid #ccc;
+			border-radius: 10px;
+			margin-bottom: 20px;
+			overflow: hidden;
+			position: relative;
+		}
+		.page > div {
+			position: absolute;
+			display: none;
+			font-size: 15px;
+			height: 18px;
+			overflow: hidden;
+		}
+		.input input {
+			width: 300px;
+			height: 10px;
+			padding: 10px;
+			border-radius: 5px;
+			display: block;
+			font-size: 15px;
+			margin: 10px auto;
+		}
+		.input span {
+			display: block;
+			text-align: center;
+		}
+		.input button {
+			width: 100px;
+			height: 40px;
+			margin-right: 20px;
+			margin-left: 20px;
+			font-size: 20px;
+			color: #fff;
+			cursor: pointer;
+			background: #13e0ff;
+			border: 1px solid #ccc;
+			border-radius: 5px;
+		}
+		.input button:hover {
+			box-shadow: 0px 0px 0 2px #fff;
+		}
+	</style>
+</head>
+<body>
+	<div class="container">
+		<h1>弹幕</h1>
+		<div class="page">
+		</div>
+		<div class="input">
+				<input id="text" type="text" placeholder="输入我吧！" value></input>
+				<span><button id="submit">发射</button><button id="reset">清屏</button></span>
+		</div>
+	</div>
+	<script type="text/javascript" src="js/jquery.js"></script>
+	<script type="text/javascript">
+	var time;
+	// 创建数据库引用。
+	var config = {
+	  authDomain: "shuiyuan001.wilddog.com",
+	  syncURL: "https://shuiyuan001.wilddogio.com"
+	};
+	wilddog.initializeApp(config);
+	var ref = wilddog.sync().ref();
+	var arr = [];
+		$(function () { 
+			//初始化弹幕
+			init_go();
+			//点击发送按钮,发送弹幕
+			$("#submit").click(function() {
+				// 获取输入框的数据
+				var inputtxt = $("#text").val();
+				if (inputtxt == "") {
+					return false;
+				} else {
+					var newtxt = ref.child('message').push(inputtxt);
+					var text = $('<div>'+inputtxt+'</div>');
+					$(".page").append(text);
+					// 将数据写到云端 message 节点下，child 用来定位子节点
+					$("#text").val("");
+					round(text);
+				}
+			});
+			//回车键发送
+			$("#text").keypress(function (event) {
+				if (event.keyCode == "13") {
+					$("#submit").trigger("click");
+				}
+			});
+			//清除按钮清除弹幕
+			$("#reset").click(function () {
+				ref.remove();
+				$(".page").children().remove();
+			});
+		});
+		function init_go() {
+			ref.on("child_added", function(snapshot) {
+			    var thistxt = snapshot.val();
+			    $.each(thistxt,function (name,value) {
+			    	var text = $('<div>'+value+'</div>');
+				    $(".page").append(text);
+				    round(text);
+			    });
+			});
+		}
+		//选择随机数
+		function round(obj) {
+			var random = Math.random(),
+				Pwidth = $(".page").width(),
+				Pheight = $(".page").height(),
+				left = Math.round(Pwidth + random*50),
+				color = Math.round(random*111111),
+				top = Math.round(random*(Pheight-18));
+				if (color < 99999) {
+					color = color*10;
+				}
+				$(obj).css({
+				 	left:left + "px",
+				 	top:top + "px",
+				 	color:"#" + color,
+				 	display:"block"
+				 });
+			move(obj);
+		};
+		//移动弹幕
+		function move(obj) {
+			var obj = obj;
+			time = setInterval(function () {
+				$(obj).css('left',parseInt($(obj).css('left')) - 5 + 'px');
+				//如果弹幕移动完成就删除
+				if (parseInt($(obj).css('left')) < -20) {
+					$(obj).remove();
+				}
+			},200);
+		}
+		//清除定时器
+		function clear () {
+		 	clearInterval(time);
+		 }
+	</script>
+</body>
+</html>

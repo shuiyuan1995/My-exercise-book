@@ -1,0 +1,211 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<title>Twitch.tv</title>
+	<style type="text/css">
+		html,body {
+		background: rgb(236,240,231);
+		height: 100%;
+		}
+		.bg {
+		background: rgb(92,84,87);
+		margin-top: 20px;
+		}
+		.container{
+		margin: 0 auto;
+		max-width: 700px;
+		color: rgb(236,240,231);
+		font-weight: bold;
+		overflow: hidden;
+		}
+		.row {
+		position: relative;
+		}
+		.row h1 {
+		font-size: 50px;
+		margin-left: 30px;
+		} 
+		.list {
+		position: absolute;
+		top: -10px;
+		right: 0;
+		color: rgb(92,84,87);
+		}
+		ul, li {
+		list-style: none;
+		margin:0;
+		padding: 0;
+		}
+		.list div {
+		background: rgb(225,225,230);
+		overflow: hidden;
+		margin:3px 0;
+		height: 20px;
+		width: 25px;
+		float: right;
+		clear: both;
+		transition: 0.5s all;
+		cursor:pointer;
+		}
+		.list span {
+		float: right;
+		}
+		.list div.active, .list div:hover {
+		width: 80px;
+		float: right;
+		}
+		.list i {
+		display: inline-block;
+		width: 10px;
+		height: 10px;
+		border-radius: 50%;
+		margin-left: 5px;
+		}
+		.content ul {
+		width: 100%;
+		}
+		.content ul li {
+		height: 70px;
+		margin-top: 4px;
+		margin-bottom: 4px;
+		}
+		.content li div {
+		display: inline-block;
+		}
+		.content li.offline {
+		background: rgb(74,94,130);
+		}
+		.content li.online {
+		background: rgb(184,204,166);
+		color:#5c5457;
+		}
+		.content .icon {
+		position: relative;
+		border-radius: 50%;
+		width: 100px;
+		}
+		.icon img {
+		width: 50px;
+		height: 50px;
+		border:4px solid #ccc;
+		border-radius: 50%;
+		margin-top: 5px;
+		margin-left: 20px;
+		overflow: hidden;
+		}
+		.content .name {
+		position: absolute;
+		height: 70px;
+		line-height: 70px;
+		width: 10%;
+		text-align: center;
+		}
+		.content .name a {
+		text-decoration: none;
+		color:#b8cca6;
+		}
+		li.online .name a {
+		color:#4a5e82;
+		}
+		.content .name a:hover {
+		text-decoration: underline;
+		}
+		.content .body {
+		position: absolute;
+		height: 70px;
+		line-height: 70px;
+		width: 33%;
+		margin-left: 10%;
+		font-style: italic;
+		font-size:15px;
+		text-align: center;
+		white-space: nowrap;
+		overflow: hidden;
+		text-overflow: ellipsis;
+		}
+	</style>
+</head>
+<body>
+	<div class="container bg">
+		<div class="row">
+			<h1>Twitch.tv</h1>
+			<div class="list">
+				<div id="all" class="active"><i style="background:#000"></i><span>ALL</span></div>
+				<div id="on"><i style="background:rgb(184,204,166);"></i><span>ONLINE</span></div>
+				<div id="off"><i style="background:rgb(142,192,164);"></i><span>OFFLINE</span></div>
+			</div>
+		</div>
+	</div>
+	<div class="container">
+		<div class="content">
+			<ul class="li">
+			</ul>
+		</div>
+	</div>
+	<div class="container bg" style="height: 10px;"></div>
+	<script type="text/javascript" src="js/jquery.js"></script>
+	<script type="text/javascript">
+		$(function () {
+			//直播者名称
+			var names = ["freecodecamp", "storbeck", "terakilobyte", "habathcx","RobotCaleb","thomasballinger","noobs2ninjas","beohoff","test_channel","ESL_SC2"];
+			//ajax请求地址
+			function url(style,name) {
+				return 'https://wind-bow.gomix.me/twitch-api/'+ style +'/'+ name +'?callback=?';
+			};
+			//每个直播的状态
+			function onoff() {
+				$.each(names,function (i,n) {
+					$.getJSON(url("streams",n),function (data) {
+						var s = data.stream,
+							body,
+							or;
+						if (s == null) {
+							body = "offline";
+							or = "offline";
+						} else {
+							var c = s.channel,
+								title = s.game;
+							body = title + ":" + c.status;
+							or = "online";
+						};
+						$.getJSON(url("channels",n),function (data) {
+							var newbody = body;
+							var name = data.display_name,
+								centurl = data.url,
+								logourl;
+							if (data.logo == null) {
+								logourl = "http://i1.sinaimg.cn/history/2014/0918/U11616P1488DT20140918150737.jpg";
+							}else {
+								logourl = data.logo;
+							};
+							console.log(body,newbody);
+							var content = $('<li class="'+or+'"><div class="icon"><img src="'+logourl+'"></div><div class="name"><a href="'+centurl+'">'+name+'</a></div><div class="body">'+body+'</div></li>');
+							$(".li").append(content);
+						});
+					});
+						
+				});
+			};
+			onoff();
+			$("#on").click(function () {
+				$("li[class=online]").show();
+				$("li[class=offline]").hide();
+				$("#on").addClass("active").siblings().removeClass("active");
+				return false;
+			});
+			$("#off").click(function () {
+				$("li[class=offline]").show();
+				$("li[class=online]").hide();
+				$("#off").addClass("active").siblings().removeClass("active");
+				return false;
+			});
+			$("#all").click(function () {
+				$("li").show();
+				$("#all").addClass("active").siblings().removeClass("active");
+				return false;
+			});
+		});
+	</script>
+</body>
+</html>

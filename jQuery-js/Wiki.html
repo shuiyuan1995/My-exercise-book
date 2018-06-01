@@ -1,0 +1,213 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<title>维基百科</title>
+	<style type="text/css">
+	html {
+		background: rgb(9,43,64);
+		color: #fff;
+		height: 100%;
+		margin: 0;
+		padding: 0;
+	}
+	a {
+		color: #fff;
+		text-decoration: none;
+	}
+	ul, li {
+		list-style: none;
+	}
+	ul li {
+		height: 150px;
+		width: 100%;
+		background: #ccc;
+		text-align: left;
+	}
+	li h1 {
+		padding: 20px 0 10px 20px;
+	}
+	li p {
+		padding-left: 30px;
+	}
+	li:hover {
+		border-left: 7px solid orange;
+	}
+	.container {
+		width: 80%;
+		margin: auto;
+		text-align: center;
+		position: relative;
+	}
+	.hide {
+		display: none;
+	}
+	#search {
+		margin-top: 25%;
+		transition: all 1s;
+	}
+	#search a {
+		display: block;
+		margin-bottom: 20px;
+	}
+	.form {
+		position: relative;
+		margin: 0 auto;
+		width: 37px;
+		height: 37px;
+		cursor:pointer;
+		border: 4px solid #D96F32;
+		border-radius: 40px;
+	}
+	.form .before {
+		width: 0px;
+		height: 20px;
+		border: 2px solid #D96F32;
+		position: absolute;
+		transform: rotate(-45deg);
+		top: 31px;
+		left: 40px;
+	}
+	.form input {
+		float: left;
+		width: 40px;
+		height: 40px;
+		cursor:pointer;
+		padding-left: 15px;
+		background: rgb(9,43,64);
+		color: #fff;
+		text-align: left;
+		border:0;
+		border-radius: 40px;
+		opacity: 0;
+		outline: none;
+	}
+	.eks {
+		display: none;
+	}
+	.eks:before {
+		content: "";
+		width: 0px;
+		height: 20px;
+		border: 2px solid #D96F32;
+		position: absolute;
+		right: 20px;
+		top: 4px;
+		transform: rotate(-45deg);
+	}
+	.eks:after {
+		content: "";
+		width: 0px;
+		height: 20px;
+		border: 2px solid #D96F32;
+		position: absolute;
+		right: 20px;
+		top: 4px;
+		transform: rotate(45deg);
+	}
+	#help {
+		margin-top: 30px;
+	}
+	</style>
+</head>
+<body>
+	<div class="container">
+		<div id="search">
+			<a href="http://en.wikipedia.org/wiki/Special:Random" target="_blank">获得一个随机维基百科条目</a>
+		<form class="form">
+			<input type="text" ng-model="searchTxt"></input>
+			<i class="before"></i>
+			<div class="eks">
+			</div>
+		</form>
+		<p class="white-text" id="help">点击图标搜索</p>
+		</div>
+		<div class="strip hide">
+			<ul class="list">
+			</ul>
+		</div>
+	</div>
+	<script type="text/javascript" src="js/jquery.js"></script>
+	<script type="text/javascript">
+		$(function () {
+			//点击图标出现搜索框
+			$("form").click(function () {
+				$(".before").animate({
+					height: "0px",
+					left: "30px"
+				}, function () {
+					$(".before").css("opacity",0);
+					$(".form").animate({
+						width:"300px",
+						height:"30px"
+					});
+					$(".form input").animate({
+						width:"250px",
+						height:"25px",
+						opacity:1
+					}, function () {
+						$(".eks").show();
+					}).css({
+						"cursor":"text"
+					});
+				});
+			});
+			//点击关闭搜索框
+			$(".eks").click(function () {
+				$(".strip").hide();
+				$("#search").css("margin-top","25%");
+				$("#help").show();
+				$(".form input").val("");
+				$(".eks").hide();
+				$(".form input").animate({
+					width:"40px",
+					height:"40px",
+					opacity:0
+				}).css({
+					"cursor":"pointer"
+				});
+				$(".form").animate({
+					width:"37px",
+					height:"37px"
+				},function () {
+					$(".before").animate({
+						height: "20px",
+						left: "40px"
+					});
+				});
+				$(".before").css("opacity",1);
+				return false;
+			});
+			$(document).keydown(function (event) {
+				if (event.keyCode == 13) {
+					if ($(".form input").val() != "") {
+						$.ajax({
+							type:"GET",
+							url:"https://en.wikipedia.org/w/api.php?format=json&action=query&generator=search&gsrnamespace=0&gsrlimit=10&prop=pageimages|extracts&pilimit=max&exintro&explaintext&exsentences=1&exlimit=max&gsrsearch=" + $(".form input").val() + "&callback=JSON_CALLBACK",
+							dataType:"jsonp",
+							success:function (data) {
+								$("#help").hide();
+								$(".strip").show();
+								$("#search").css("margin-top","1%");
+								var q = data.query,
+									p = q.pages;
+								$.each(p, function (i,n) {
+									var title = n.title,
+										extract = n.extract,
+										pageid = n.pageid;
+									var li = $('<li><a href="https://en.wikipedia.org/?curid=' + pageid + '"><h1>' + title + '</h1><p>' + extract + '</p></a></li>');
+									$(".list").append(li);
+								});
+							},
+							error:function () {
+								alert("发生错误！");
+							}
+						});
+						return false;
+					};
+				};
+			});
+		});
+	</script>
+</body>
+</html>
